@@ -1,0 +1,63 @@
+@(request: play.mvc.Http.Request, searchMap : Map[String,List[UserRepositoryTopics]])
+
+  @main2(request, "Welcome to Play") {
+<div class=".container-fluid">
+        <div id="jumbotron" class="jumbotron jumbotron-fluid" style="margin:0px;">
+            <h1 id="mainBanner" style="width: 100px;
+           margin-left: 570px;
+           margin-right: auto;" >Gitterific</h1>
+        </div>
+    <nav id="reponavbar" class="navbar navbar-inverse" >
+    </nav>
+</div>
+
+<div id="search-page" class="container">
+    <div>
+    <form id="searchForm" method="post">
+      <input type="text" class="input-lg" name="phrase" id="phrase" size="105" value="">
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>  Search</button>
+    </form>
+    </div>
+
+    @if(searchMap != null && searchMap.size > 0) {
+        @for((phrase, userRepositoryTopicsList) <- searchMap) {
+        <dl class="row" style="margin-top: 50px;">
+            <dt class="col-sm-3"><h4>Search term : </h4></dt>
+            <dd class="col-sm-9"><h4>@phrase</h4></dd>
+        </dl>
+
+        <table border="1" class="table">
+            <thead class="thead-light">
+                <tr><th>User</th><th>Repository</th><th>Topics</th>
+            </thead>
+            <tbody>
+            @for( userRepositoryTopics <- userRepositoryTopicsList ) {
+                <tr><td><a href="/getUserDetails/@userRepositoryTopics.getOwner()">@userRepositoryTopics.getOwner()</a></td><td><a href="/getRepositoryProfile/@userRepositoryTopics.getOwner()/@userRepositoryTopics.getName()" class="repository-details" username="@userRepositoryTopics.getOwner()">@userRepositoryTopics.getName()</a></td>
+                <td>
+                    @for(topic <- userRepositoryTopics.getTopics()) {
+                    <a href="/getReposByTopics/@topic" class = "topic-link">@topic</a>
+                    }
+                </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        }
+    }
+</div>
+<div class="container">
+    <div id="repository-details">
+    </div>
+    <div id="search-page-result">
+    </div>
+    <div id="topic-page-result">
+    </div>
+    <div id="user-details">
+    </div>
+    <div id="issue-statistics">
+    </div>
+    <div id="commit-statistics">
+    </div>
+</div>
+}
+
